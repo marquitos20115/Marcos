@@ -7,8 +7,11 @@
 body {
     font-family: Arial, sans-serif;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81);
-    color: white;
+    background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.20), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.18), transparent 30%),
+        linear-gradient(135deg, #0f172a, #111827, #1e293b);
+    color: #f8fafc;
 }
 
 .app {
@@ -16,31 +19,69 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    padding: 40px 20px;
 }
 
-.card {
+.panel {
     width: 100%;
-    max-width: 650px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    padding: 35px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(18px);
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
 }
 
-h1 {
-    text-align: center;
-    font-size: 2.2rem;
+.encabezado {
+    margin-bottom: 28px;
+}
+
+.marca {
+    color: #67e8f9;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: 8px;
 }
 
+.encabezado h1 {
+    font-size: 2.3rem;
+    margin-bottom: 10px;
+}
+
 .subtitulo {
-    text-align: center;
-    color: #dbeafe;
-    margin-bottom: 28px;
+    color: #cbd5e1;
     font-size: 1rem;
+}
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+.card-resumen {
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.numero {
+    font-size: 1.9rem;
+    font-weight: bold;
+    color: #67e8f9;
+}
+
+.texto-resumen {
+    color: #cbd5e1;
+    font-size: 0.95rem;
 }
 
 .formulario {
@@ -51,88 +92,157 @@ h1 {
 
 .formulario input {
     flex: 1;
-    padding: 14px 16px;
-    border-radius: 14px;
     border: none;
     outline: none;
+    border-radius: 16px;
+    padding: 15px 18px;
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.94);
     color: #111827;
 }
 
 .formulario button {
     border: none;
-    border-radius: 14px;
-    padding: 14px 20px;
-    background: #22d3ee;
+    border-radius: 16px;
+    padding: 15px 22px;
+    background: linear-gradient(135deg, #22d3ee, #38bdf8);
     color: #082f49;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 20px rgba(34, 211, 238, 0.22);
 }
 
 .formulario button:hover {
     transform: translateY(-2px);
-    opacity: 0.95;
+    opacity: 0.96;
 }
 
-.lista-contenedor {
+.bloque-tareas {
     margin-top: 10px;
 }
 
-.lista-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
+.titulo-bloque {
+    margin-bottom: 16px;
 }
 
-.lista-header h2 {
-    font-size: 1.3rem;
+.titulo-bloque h2 {
+    font-size: 1.35rem;
 }
 
-.contador {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 8px 12px;
-    border-radius: 999px;
-    font-size: 0.9rem;
-    color: #e0f2fe;
-}
-
-.lista {
+.lista-tareas {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
-.item {
+.tarea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.tarea:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.tarea-izquierda {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+.check-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
     background: rgba(255, 255, 255, 0.14);
+    color: #67e8f9;
+    font-weight: bold;
+    font-size: 1.1rem;
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 16px;
-    padding: 16px 18px;
+    flex-shrink: 0;
+}
+
+.texto-tarea {
     font-size: 1rem;
     color: #f8fafc;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    word-break: break-word;
 }
 
-.vacio {
+.tarea-completada .texto-tarea {
+    text-decoration: line-through;
+    color: #94a3b8;
+}
+
+.tarea-completada .check-btn {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+}
+
+.btn-eliminar {
+    text-decoration: none;
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.20);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-eliminar:hover {
+    background: rgba(239, 68, 68, 0.22);
+    transform: translateY(-1px);
+}
+
+.estado-vacio {
     text-align: center;
-    padding: 30px 20px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #dbeafe;
+    padding: 44px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
 }
 
-.vacio small {
-    display: block;
-    margin-top: 8px;
-    color: #bfdbfe;
+.icono-vacio {
+    font-size: 2.4rem;
+    margin-bottom: 12px;
 }
 
-@media (max-width: 600px) {
-    .card {
+.estado-vacio h3 {
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+}
+
+.estado-vacio p {
+    color: #cbd5e1;
+}
+
+@media (max-width: 768px) {
+    .panel {
         padding: 24px;
+    }
+
+    .encabezado h1 {
+        font-size: 1.8rem;
+    }
+
+    .resumen {
+        grid-template-columns: 1fr;
     }
 
     .formulario {
@@ -143,9 +253,12 @@ h1 {
         width: 100%;
     }
 
-    .lista-header {
+    .tarea {
         flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
+        align-items: stretch;
+    }
+
+    .btn-eliminar {
+        text-align: center;
     }
 }
