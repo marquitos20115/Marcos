@@ -1,33 +1,46 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi app de tareas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <div class="contenedor">
-        <h1>Mi app de tareas 📝</h1>
-        <p>Agregá una tarea y mirá cómo aparece abajo</p>
+    <div class="fondo"></div>
 
-        <form method="POST">
-            <input type="text" name="tarea" placeholder="Escribí una tarea" required>
-            <button type="submit">Agregar</button>
-        </form>
+    <main class="app">
+        <div class="card">
+            <h1>Mi app de tareas 📝</h1>
+            <p class="subtitulo">Organizá tu día de una forma simple</p>
 
-        <h2>Lista de tareas</h2>
-        <ul>
-            {% for tarea in tareas %}
-            <li>
-                {{ tarea }}
-                <a href="/eliminar/{{ loop.index0 }}">
-                    <button>Eliminar</button>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+            <form method="POST" class="formulario">
+                <input type="text" name="tarea" placeholder="Escribí una tarea..." required>
+                <button type="submit">Agregar</button>
+            </form>
+
+            <section class="lista-contenedor">
+                <div class="lista-header">
+                    <h2>Lista de tareas</h2>
+                    <span class="contador">{{ tareas|length }} tareas</span>
+                </div>
+
+                {% if tareas %}
+                    <ul class="lista">
+                        {% for tarea in tareas %}
+                            <li class="item">
+                                <span>{{ tarea }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="vacio">
+                        <p>No hay tareas todavía.</p>
+                        <small>Agregá una para empezar.</small>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
 </body>
-
 </html>
