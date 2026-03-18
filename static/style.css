@@ -24,7 +24,7 @@ body {
 
 .panel {
     width: 100%;
-    max-width: 900px;
+    max-width: 950px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(18px);
@@ -60,7 +60,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
 }
 
 .card-resumen {
@@ -84,10 +84,37 @@ body {
     font-size: 0.95rem;
 }
 
+.progreso-contenedor {
+    margin-bottom: 24px;
+}
+
+.progreso-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+.barra-progreso {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.barra-progreso-interna {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22d3ee, #38bdf8);
+    transition: width 0.3s ease;
+}
+
 .formulario {
     display: flex;
     gap: 12px;
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 
 .formulario input {
@@ -116,6 +143,46 @@ body {
 .formulario button:hover {
     transform: translateY(-2px);
     opacity: 0.96;
+}
+
+.herramientas {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.herramientas input,
+.herramientas select {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.herramientas input {
+    flex: 1;
+    min-width: 220px;
+}
+
+.herramientas select {
+    background: #e2e8f0;
+    color: #111827;
+}
+
+.btn-secundario {
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-secundario:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
 }
 
 .bloque-tareas {
@@ -147,6 +214,7 @@ body {
     background: rgba(255, 255, 255, 0.09);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform 0.2s ease, background 0.2s ease;
+    animation: aparecer 0.25s ease;
 }
 
 .tarea:hover {
@@ -243,6 +311,17 @@ body {
     color: #cbd5e1;
 }
 
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 768px) {
     .panel {
         padding: 24px;
@@ -269,7 +348,8 @@ body {
         align-items: stretch;
     }
 
-    .btn-eliminar {
+    .btn-eliminar,
+    .btn-secundario {
         text-align: center;
     }
 }
