@@ -3,44 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi app de tareas</title>
+    <title>TaskFlow | Mis tareas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="fondo"></div>
-
     <main class="app">
-        <div class="card">
-            <h1>Mi app de tareas 📝</h1>
-            <p class="subtitulo">Organizá tu día de una forma simple</p>
+        <section class="panel">
+            <div class="encabezado">
+                <div>
+                    <p class="marca">TaskFlow</p>
+                    <h1>Organizá tus tareas</h1>
+                    <p class="subtitulo">Una app simple, moderna y funcional para tu día.</p>
+                </div>
+            </div>
+
+            <div class="resumen">
+                <div class="card-resumen">
+                    <span class="numero">{{ tareas_totales }}</span>
+                    <span class="texto-resumen">Totales</span>
+                </div>
+                <div class="card-resumen">
+                    <span class="numero">{{ tareas_completadas }}</span>
+                    <span class="texto-resumen">Completadas</span>
+                </div>
+                <div class="card-resumen">
+                    <span class="numero">{{ tareas_totales - tareas_completadas }}</span>
+                    <span class="texto-resumen">Pendientes</span>
+                </div>
+            </div>
 
             <form method="POST" class="formulario">
-                <input type="text" name="tarea" placeholder="Escribí una tarea..." required>
+                <input type="text" name="tarea" placeholder="Escribí una nueva tarea..." required>
                 <button type="submit">Agregar</button>
             </form>
 
-            <section class="lista-contenedor">
-                <div class="lista-header">
-                    <h2>Lista de tareas</h2>
-                    <span class="contador">{{ tareas|length }} tareas</span>
+            <section class="bloque-tareas">
+                <div class="titulo-bloque">
+                    <h2>Mis tareas</h2>
                 </div>
 
                 {% if tareas %}
-                    <ul class="lista">
+                    <ul class="lista-tareas">
                         {% for tarea in tareas %}
-                            <li class="item">
-                                <span>{{ tarea }}</span>
+                            <li class="tarea {% if tarea.completada %}tarea-completada{% endif %}">
+                                <div class="tarea-izquierda">
+                                    <a href="/completar/{{ loop.index0 }}" class="check-btn">
+                                        {% if tarea.completada %}
+                                            ✓
+                                        {% else %}
+                                            ○
+                                        {% endif %}
+                                    </a>
+
+                                    <span class="texto-tarea">
+                                        {{ tarea.texto }}
+                                    </span>
+                                </div>
+
+                                <a href="/eliminar/{{ loop.index0 }}" class="btn-eliminar">
+                                    Eliminar
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <div class="vacio">
-                        <p>No hay tareas todavía.</p>
-                        <small>Agregá una para empezar.</small>
+                    <div class="estado-vacio">
+                        <div class="icono-vacio">📝</div>
+                        <h3>No tenés tareas todavía</h3>
+                        <p>Agregá tu primera tarea para empezar a organizarte.</p>
                     </div>
                 {% endif %}
             </section>
-        </div>
+        </section>
     </main>
 </body>
 </html>
