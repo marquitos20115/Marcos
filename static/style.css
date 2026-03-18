@@ -363,3 +363,30 @@ body {
         text-align: center;
     }
 }
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tarea {
+    animation: aparecer 0.3s ease;
+}
+
+.card-resumen {
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card-resumen:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+.formulario button:hover {
+    transform: translateY(-2px) scale(1.02);
+}
