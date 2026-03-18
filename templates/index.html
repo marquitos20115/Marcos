@@ -63,7 +63,11 @@
                 <option value="viejas">Más viejas</option>
             </select>
 
-            <a href="/borrar-completadas" class="btn-secundario">
+            <a
+                href="/borrar-completadas"
+                class="btn-secundario"
+                onclick="return confirm('¿Seguro que querés borrar todas las tareas completadas?')"
+            >
                 Borrar completadas
             </a>
         </div>
@@ -97,7 +101,13 @@
                         </div>
                     </div>
 
-                    <a href="/eliminar/{{ tarea['id'] }}" class="btn-eliminar">Eliminar</a>
+                    <a
+                        href="/eliminar/{{ tarea['id'] }}"
+                        class="btn-eliminar"
+                        onclick="return confirm('¿Eliminar esta tarea?')"
+                    >
+                        Eliminar
+                    </a>
                 </li>
                 {% endfor %}
             </ul>
@@ -153,6 +163,11 @@ function actualizarLista() {
 buscador.addEventListener("input", actualizarLista);
 filtro.addEventListener("change", actualizarLista);
 orden.addEventListener("change", actualizarLista);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.querySelector('input[name="tarea"]');
+    if (input) input.focus();
+});
 </script>
 
 </body>
