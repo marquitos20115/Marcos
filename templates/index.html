@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskFlow | Mis tareas</title>
+    <title>TaskFlow Pro</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,9 +11,9 @@
         <section class="panel">
             <div class="encabezado">
                 <div>
-                    <p class="marca">TaskFlow</p>
+                    <p class="marca">TaskFlow Pro</p>
                     <h1>Organizá tus tareas</h1>
-                    <p class="subtitulo">Una app simple, moderna y funcional para tu día.</p>
+                    <p class="subtitulo">Simple, moderna y ahora con guardado real.</p>
                 </div>
             </div>
 
@@ -45,24 +45,23 @@
                 {% if tareas %}
                     <ul class="lista-tareas">
                         {% for tarea in tareas %}
-                            <li class="tarea {% if tarea.completada %}tarea-completada{% endif %}">
+                            <li class="tarea {% if tarea['completada'] == 1 %}tarea-completada{% endif %}">
                                 <div class="tarea-izquierda">
-                                    <a href="/completar/{{ loop.index0 }}" class="check-btn">
-                                        {% if tarea.completada %}
+                                    <a href="/completar/{{ tarea['id'] }}" class="check-btn">
+                                        {% if tarea['completada'] == 1 %}
                                             ✓
                                         {% else %}
                                             ○
                                         {% endif %}
                                     </a>
 
-                                    <span class="texto-tarea">
-                                        {{ tarea.texto }}
-                                    </span>
+                                    <div class="contenido-tarea">
+                                        <span class="texto-tarea">{{ tarea["texto"] }}</span>
+                                        <small class="fecha-tarea">Creada: {{ tarea["creada_en"] }}</small>
+                                    </div>
                                 </div>
 
-                                <a href="/eliminar/{{ loop.index0 }}" class="btn-eliminar">
-                                    Eliminar
-                                </a>
+                                <a href="/eliminar/{{ tarea['id'] }}" class="btn-eliminar">Eliminar</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -70,7 +69,7 @@
                     <div class="estado-vacio">
                         <div class="icono-vacio">📝</div>
                         <h3>No tenés tareas todavía</h3>
-                        <p>Agregá tu primera tarea para empezar a organizarte.</p>
+                        <p>Agregá tu primera tarea para empezar.</p>
                     </div>
                 {% endif %}
             </section>
