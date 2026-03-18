@@ -109,7 +109,7 @@ body {
     color: #082f49;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease;
     box-shadow: 0 10px 20px rgba(34, 211, 238, 0.22);
 }
 
@@ -161,6 +161,12 @@ body {
     flex: 1;
 }
 
+.contenido-tarea {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .check-btn {
     width: 38px;
     height: 38px;
@@ -181,6 +187,11 @@ body {
     font-size: 1rem;
     color: #f8fafc;
     word-break: break-word;
+}
+
+.fecha-tarea {
+    color: #94a3b8;
+    font-size: 0.82rem;
 }
 
 .tarea-completada .texto-tarea {
