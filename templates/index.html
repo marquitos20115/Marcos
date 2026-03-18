@@ -1,174 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-<meta charset="UTF-8">
-<title>TaskFlow Pro</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
 <main class="app">
+    <section class="panel">
 
-<section class="panel">
+        <div class="encabezado">
+            <p class="marca">TASKFLOW PRO</p>
+            <h1>Organizá tus tareas</h1>
+            <p class="subtitulo">Simple, moderna y productiva.</p>
+        </div>
 
-<h1>TaskFlow Pro</h1>
+        <div class="resumen">
+            <div class="card-resumen">
+                <span class="numero">{{ tareas_totales }}</span>
+                <span class="texto-resumen">Totales</span>
+            </div>
 
-<!-- FORMULARIO -->
-<form method="POST" class="formulario">
-    <input type="text" name="tarea" placeholder="Escribí una nueva tarea..." required>
-    <button type="submit">Agregar</button>
-</form>
+            <div class="card-resumen">
+                <span class="numero">{{ tareas_completadas }}</span>
+                <span class="texto-resumen">Completadas</span>
+            </div>
 
+            <div class="card-resumen">
+                <span class="numero">{{ tareas_pendientes }}</span>
+                <span class="texto-resumen">Pendientes</span>
+            </div>
+        </div>
 
-<!-- HERRAMIENTAS -->
-<div class="herramientas">
+        <div class="progreso-contenedor">
+            <div class="progreso-info">
+                <span>Progreso</span>
+                <span>{{ progreso }}%</span>
+            </div>
+            <div class="barra-progreso">
+                <div class="barra-progreso-interna" style="width: {{ progreso }}%;"></div>
+            </div>
+        </div>
 
-<input id="buscador" type="text" placeholder="Buscar tarea...">
+        <form method="POST" class="formulario">
+            <input type="text" name="tarea" placeholder="Escribí una nueva tarea..." required>
+            <button type="submit">Agregar</button>
+        </form>
 
-<select id="filtro">
-<option value="todas">Todas</option>
-<option value="pendientes">Pendientes</option>
-<option value="completadas">Completadas</option>
-</select>
+        <div class="herramientas">
+            <input id="buscador" type="text" placeholder="Buscar tarea...">
 
-<select id="orden">
-<option value="nuevas">Más nuevas</option>
-<option value="viejas">Más viejas</option>
-</select>
+            <select id="filtro">
+                <option value="todas">Todas</option>
+                <option value="pendientes">Pendientes</option>
+                <option value="completadas">Completadas</option>
+            </select>
 
-</div>
+            <select id="orden">
+                <option value="nuevas">Más nuevas</option>
+                <option value="viejas">Más viejas</option>
+            </select>
 
+            <a href="/borrar-completadas" class="btn-secundario">
+                Borrar completadas
+            </a>
+        </div>
 
-<!-- LISTA DE TAREAS -->
-<section class="bloque-tareas">
+        <section class="bloque-tareas">
+            <div class="titulo-bloque">
+                <h2>Mis tareas</h2>
+            </div>
 
-<h2>Mis tareas</h2>
+            {% if tareas %}
+            <ul class="lista-tareas">
+                {% for tarea in tareas %}
+                <li
+                    class="tarea {% if tarea['completada'] == 1 %}tarea-completada{% endif %}"
+                    data-texto="{{ tarea['texto'] | lower }}"
+                    data-completada="{{ tarea['completada'] }}"
+                    data-id="{{ tarea['id'] }}"
+                >
+                    <div class="tarea-izquierda">
+                        <a href="/completar/{{ tarea['id'] }}" class="check-btn">
+                            {% if tarea['completada'] == 1 %}
+                                ✓
+                            {% else %}
+                                ○
+                            {% endif %}
+                        </a>
 
-{% if tareas %}
+                        <div class="contenido-tarea">
+                            <span class="texto-tarea">{{ tarea['texto'] }}</span>
+                            <small class="fecha-tarea">Creada: {{ tarea['creada_en'] }}</small>
+                        </div>
+                    </div>
 
-<ul class="lista-tareas">
+                    <a href="/eliminar/{{ tarea['id'] }}" class="btn-eliminar">Eliminar</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="estado-vacio">
+                <div class="icono-vacio">📋</div>
+                <h3>No tenés tareas todavía</h3>
+                <p>Agregá tu primera tarea para empezar.</p>
+            </div>
+            {% endif %}
+        </section>
 
-{% for tarea in tareas %}
-
-<li
-class="tarea {% if tarea['completada'] == 1 %}tarea-completada{% endif %}"
-data-texto="{{ tarea['texto'] | lower }}"
-data-completada="{{ tarea['completada'] }}"
-data-id="{{ tarea['id'] }}"
->
-
-<div class="tarea-izquierda">
-
-<a href="/completar/{{ tarea['id'] }}" class="check-btn">
-
-{% if tarea['completada'] == 1 %}
-✓
-{% else %}
-○
-{% endif %}
-
-</a>
-
-<div class="contenido-tarea">
-
-<span class="texto-tarea">
-{{ tarea['texto'] }}
-</span>
-
-<small class="fecha-tarea">
-Creada: {{ tarea['creada_en'] }}
-</small>
-
-</div>
-
-</div>
-
-<a href="/eliminar/{{ tarea['id'] }}" class="btn-eliminar">
-Eliminar
-</a>
-
-</li>
-
-{% endfor %}
-
-</ul>
-
-{% else %}
-
-<div class="estado-vacio">
-
-<div class="icono-vacio">📋</div>
-
-<h3>No tenés tareas todavía</h3>
-
-<p>Agregá tu primera tarea para empezar.</p>
-
-</div>
-
-{% endif %}
-
-</section>
-
-</section>
-
+    </section>
 </main>
 
-
 <script>
-
 const buscador = document.getElementById("buscador");
 const filtro = document.getElementById("filtro");
 const orden = document.getElementById("orden");
 
 function actualizarLista() {
+    const texto = buscador.value.toLowerCase();
+    const estado = filtro.value;
+    const lista = document.querySelector(".lista-tareas");
 
-const texto = buscador.value.toLowerCase();
-const estado = filtro.value;
-const lista = document.querySelector(".lista-tareas");
+    if (!lista) return;
 
-if (!lista) return;
+    const tareas = Array.from(lista.children);
 
-const tareas = Array.from(lista.children);
+    tareas.forEach(t => {
+        const contenido = t.dataset.texto;
+        const completada = t.dataset.completada === "1";
 
-tareas.forEach(t => {
+        let visible = true;
 
-const contenido = t.dataset.texto;
-const completada = t.dataset.completada === "1";
+        if (!contenido.includes(texto)) visible = false;
+        if (estado === "pendientes" && completada) visible = false;
+        if (estado === "completadas" && !completada) visible = false;
 
-let visible = true;
+        t.style.display = visible ? "flex" : "none";
+    });
 
-if (!contenido.includes(texto)) visible = false;
+    const ordenadas = tareas.sort((a, b) => {
+        const idA = Number(a.dataset.id);
+        const idB = Number(b.dataset.id);
 
-if (estado === "pendientes" && completada) visible = false;
+        return orden.value === "nuevas" ? idB - idA : idA - idB;
+    });
 
-if (estado === "completadas" && !completada) visible = false;
-
-t.style.display = visible ? "flex" : "none";
-
-});
-
-
-const ordenadas = tareas.sort((a, b) => {
-
-const idA = Number(a.dataset.id);
-const idB = Number(b.dataset.id);
-
-return orden.value === "nuevas"
-? idB - idA
-: idA - idB;
-
-});
-
-ordenadas.forEach(t => lista.appendChild(t));
-
+    ordenadas.forEach(t => lista.appendChild(t));
 }
 
 buscador.addEventListener("input", actualizarLista);
 filtro.addEventListener("change", actualizarLista);
 orden.addEventListener("change", actualizarLista);
-
 </script>
 
 </body>
