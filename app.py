@@ -49,12 +49,19 @@ def inicio():
 
     tareas_totales = len(tareas)
     tareas_completadas = sum(1 for tarea in tareas if tarea["completada"] == 1)
+    tareas_pendientes = tareas_totales - tareas_completadas
+
+    progreso = 0
+    if tareas_totales > 0:
+        progreso = int((tareas_completadas / tareas_totales) * 100)
 
     return render_template(
         "index.html",
         tareas=tareas,
         tareas_totales=tareas_totales,
-        tareas_completadas=tareas_completadas
+        tareas_completadas=tareas_completadas,
+        tareas_pendientes=tareas_pendientes,
+        progreso=progreso
     )
 
 
@@ -82,6 +89,15 @@ def completar(tarea_id):
 def eliminar(tarea_id):
     conn = get_connection()
     conn.execute("DELETE FROM tareas WHERE id = ?", (tarea_id,))
+    conn.commit()
+    conn.close()
+    return redirect("/")
+
+
+@app.route("/borrar-completadas")
+def borrar_completadas():
+    conn = get_connection()
+    conn.execute("DELETE FROM tareas WHERE completada = 1")
     conn.commit()
     conn.close()
     return redirect("/")
