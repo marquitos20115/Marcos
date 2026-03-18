@@ -1,0 +1,34 @@
+templates/index.html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mi app de tareas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1>Mi app de tareas 📝</h1>
+        <p>Agregá una tarea y mirá cómo aparece abajo</p>
+
+        <form method="POST">
+            <input type="text" name="tarea" placeholder="Escribí una tarea" required>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <h2>Lista de tareas</h2>
+        <ul>
+            {% for tarea in tareas %}
+            <li>
+                {{ tarea }}
+                <a href="/eliminar/{{ loop.index0 }}">
+                    <button>Eliminar</button>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>
