@@ -1,114 +1,352 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organizador Personal</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+* {
+  box-sizing: border-box;
+}
 
-  <div class="app-container">
-    <header class="hero">
-      <div class="hero-text">
-        <h1>Organizador Personal</h1>
-        <p>
-          Gestioná tus tareas personales de forma clara, práctica y ordenada.
-          Cada tarea se registra con información detallada para ayudarte a organizar mejor lo que necesitás.
-        </p>
-      </div>
-    </header>
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --surface-soft: #f9fafb;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+}
 
-    <main class="main-content">
-      <section class="card form-card">
-        <h2>Nueva tarea personal</h2>
-        <form method="POST" class="task-form">
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
-          <label for="titulo">Nombre de la tarea</label>
-          <input type="text" id="titulo" name="titulo" placeholder="Ej: Terminar diseño de la app" required>
+.hero {
+  background: linear-gradient(135deg, #111827, #1f2937, #374151);
+  color: white;
+  padding: 56px 20px 42px;
+}
 
-          <label for="objetivo">¿Qué buscás con esta tarea?</label>
-          <input type="text" id="objetivo" name="objetivo" placeholder="Ej: Mejorar la web y dejarla lista para móvil" required>
+.hero-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
 
-          <label for="categoria">Categoría</label>
-          <select id="categoria" name="categoria" required>
-            <option value="">Seleccionar</option>
-            <option value="Trabajo">Trabajo</option>
-            <option value="Estudio">Estudio</option>
-            <option value="Personal">Personal</option>
-            <option value="Salud">Salud</option>
-            <option value="Proyecto">Proyecto</option>
-          </select>
+.hero-tag {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 13px;
+  font-weight: 600;
+}
 
-          <label for="prioridad">Prioridad</label>
-          <select id="prioridad" name="prioridad" required>
-            <option value="">Seleccionar</option>
-            <option value="Alta">Alta</option>
-            <option value="Media">Media</option>
-            <option value="Baja">Baja</option>
-          </select>
+.hero h1 {
+  margin: 0 0 12px;
+  font-size: 42px;
+  line-height: 1.1;
+}
 
-          <div class="row">
-            <div>
-              <label for="fecha">Fecha</label>
-              <input type="date" id="fecha" name="fecha" required>
-            </div>
+.hero p {
+  margin: 0;
+  max-width: 760px;
+  color: #d1d5db;
+  font-size: 17px;
+  line-height: 1.7;
+}
 
-            <div>
-              <label for="hora">Hora</label>
-              <input type="time" id="hora" name="hora">
-            </div>
-          </div>
+.main-content {
+  max-width: 1100px;
+  margin: -24px auto 40px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
 
-          <label for="estado">Estado</label>
-          <select id="estado" name="estado" required>
-            <option value="">Seleccionar</option>
-            <option value="Pendiente">Pendiente</option>
-            <option value="En proceso">En proceso</option>
-            <option value="Completada">Completada</option>
-          </select>
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
 
-          <label for="descripcion">Descripción detallada</label>
-          <textarea id="descripcion" name="descripcion" rows="4" placeholder="Escribí detalles sobre la tarea..."></textarea>
+.section-title {
+  margin-bottom: 18px;
+}
 
-          <label for="notas">Notas personales</label>
-          <textarea id="notas" name="notas" rows="3" placeholder="Observaciones, ideas, recordatorios..."></textarea>
+.section-title h2 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
 
-          <button type="submit" class="btn-primary">Guardar tarea</button>
-        </form>
-      </section>
+.section-title p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
 
-      <section class="card list-card">
-        <h2>Mis tareas</h2>
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-        {% if tareas %}
-          <div class="task-list">
-            {% for tarea in tareas %}
-              <article class="task-item">
-                <div class="task-header">
-                  <h3>{{ tarea.titulo }}</h3>
-                  <span class="badge">{{ tarea.prioridad }}</span>
-                </div>
+.task-form label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 4px;
+}
 
-                <p><strong>Objetivo:</strong> {{ tarea.objetivo }}</p>
-                <p><strong>Categoría:</strong> {{ tarea.categoria }}</p>
-                <p><strong>Fecha:</strong> {{ tarea.fecha }}</p>
-                <p><strong>Hora:</strong> {{ tarea.hora if tarea.hora else "Sin horario definido" }}</p>
-                <p><strong>Estado:</strong> {{ tarea.estado }}</p>
-                <p><strong>Descripción:</strong> {{ tarea.descripcion if tarea.descripcion else "Sin descripción" }}</p>
-                <p><strong>Notas:</strong> {{ tarea.notas if tarea.notas else "Sin notas" }}</p>
-              </article>
-            {% endfor %}
-          </div>
-        {% else %}
-          <div class="empty-state">
-            <p>Todavía no cargaste tareas.</p>
-            <span>Completá el formulario para empezar a organizarte.</span>
-          </div>
-        {% endif %}
-      </section>
-    </main>
-  </div>
+.task-form input,
+.task-form select,
+.task-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  background: var(--surface-soft);
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: 0.2s ease;
+}
 
-</body>
-</html>
+.task-form input:focus,
+.task-form select:focus,
+.task-form textarea:focus {
+  border-color: #111827;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.06);
+}
+
+.task-form textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-height: 46px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  width: 100%;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #111827, #374151);
+  color: white;
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.18);
+}
+
+.btn-success {
+  background: #111827;
+  color: white;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.task-item {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  background: #fcfcfd;
+}
+
+.task-completed {
+  opacity: 0.88;
+}
+
+.task-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.task-top h3 {
+  margin: 0 0 6px;
+  font-size: 21px;
+}
+
+.task-objetivo {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.task-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.prioridad-alta {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.prioridad-media {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.prioridad-baja {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.estado-pendiente {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.estado-en-proceso {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.estado-completada {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.task-info {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.task-info p {
+  margin: 0;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.task-actions form {
+  margin: 0;
+}
+
+.empty-state {
+  border: 1px dashed var(--border);
+  border-radius: 18px;
+  padding: 28px;
+  text-align: center;
+  background: var(--surface-soft);
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 40px 16px 34px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .main-content {
+    margin-top: -16px;
+    padding: 0 14px 24px;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .section-title h2 {
+    font-size: 24px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .task-top {
+    flex-direction: column;
+  }
+
+  .task-badges {
+    justify-content: flex-start;
+  }
+
+  .task-actions {
+    flex-direction: column;
+  }
+
+  .task-actions form,
+  .task-actions .btn {
+    width: 100%;
+  }
+}
