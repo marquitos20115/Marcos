@@ -11,13 +11,20 @@
 </head>
 <body>
   <header class="hero">
-    <div class="hero-content">
-      <span class="hero-tag">Sitio web personal</span>
-      <h1>Organizador Personal</h1>
-      <p>
-        Gestioná tus tareas privadas de forma clara, ordenada y profesional.
-        Registrá objetivos, prioridades, fechas y detalles importantes en un solo lugar.
-      </p>
+    <div class="hero-content hero-topbar">
+      <div>
+        <span class="hero-tag">Sitio web personal</span>
+        <h1>Organizador Personal</h1>
+        <p>
+          Gestioná tus tareas privadas de forma clara, ordenada y profesional.
+          Registrá objetivos, prioridades, fechas y detalles importantes en un solo lugar.
+        </p>
+      </div>
+
+      <div class="user-box">
+        <span class="user-name">Hola, {{ usuario }}</span>
+        <a href="{{ url_for('logout') }}" class="btn btn-secondary">Cerrar sesión</a>
+      </div>
     </div>
   </header>
 
@@ -30,22 +37,10 @@
 
       <form method="POST" class="task-form">
         <label for="titulo">Nombre de la tarea</label>
-        <input
-          type="text"
-          id="titulo"
-          name="titulo"
-          placeholder="Ej: Terminar diseño de la web"
-          required
-        >
+        <input type="text" id="titulo" name="titulo" placeholder="Ej: Terminar diseño de la web" required>
 
         <label for="objetivo">¿Qué buscás con esta tarea?</label>
-        <input
-          type="text"
-          id="objetivo"
-          name="objetivo"
-          placeholder="Ej: Mejorar la página y dejarla más profesional"
-          required
-        >
+        <input type="text" id="objetivo" name="objetivo" placeholder="Ej: Mejorar la página y dejarla más profesional" required>
 
         <label for="categoria">Categoría</label>
         <select id="categoria" name="categoria" required>
@@ -86,20 +81,10 @@
         </select>
 
         <label for="descripcion">Descripción detallada</label>
-        <textarea
-          id="descripcion"
-          name="descripcion"
-          rows="4"
-          placeholder="Escribí detalles importantes sobre la tarea..."
-        ></textarea>
+        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Escribí detalles importantes sobre la tarea..."></textarea>
 
         <label for="notas">Notas personales</label>
-        <textarea
-          id="notas"
-          name="notas"
-          rows="3"
-          placeholder="Ideas, recordatorios u observaciones..."
-        ></textarea>
+        <textarea id="notas" name="notas" rows="3" placeholder="Ideas, recordatorios u observaciones..."></textarea>
 
         <button type="submit" class="btn btn-primary">Guardar tarea</button>
       </form>
@@ -136,6 +121,8 @@
               </div>
 
               <div class="task-actions">
+                <a href="{{ url_for('editar_tarea', tarea_id=tarea.id) }}" class="btn btn-edit">Editar</a>
+
                 {% if tarea.estado != 'Completada' %}
                   <form action="{{ url_for('completar_tarea', tarea_id=tarea.id) }}" method="POST">
                     <button type="submit" class="btn btn-success">Marcar completada</button>
