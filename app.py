@@ -75,6 +75,51 @@ def home():
     return render_template("index.html", tareas=tareas)
 
 
+@app.route("/editar/<int:tarea_id>", methods=["GET", "POST"])
+def editar_tarea(tarea_id):
+    conn = get_connection()
+    tarea = conn.execute("SELECT * FROM tareas WHERE id = ?", (tarea_id,)).fetchone()
+
+    if not tarea:
+        conn.close()
+        return redirect(url_for("home"))
+
+    if request.method == "POST":
+        titulo = request.form.get("titulo", "").strip()
+        objetivo = request.form.get("objetivo", "").strip()
+        categoria = request.form.get("categoria", "").strip()
+        prioridad = request.form.get("prioridad", "").strip()
+        fecha = request.form.get("fecha", "").strip()
+        hora = request.form.get("hora", "").strip()
+        estado = request.form.get("estado", "").strip()
+        descripcion = request.form.get("descripcion", "").strip()
+        notas = request.form.get("notas", "").strip()
+
+        if titulo and objetivo and categoria and prioridad and fecha and estado:
+            conn.execute("""
+                UPDATE tareas
+                SET titulo = ?,
+                    objetivo = ?,
+                    categoria = ?,
+                    prioridad = ?,
+                    fecha = ?,
+                    hora = ?,
+                    estado = ?,
+                    descripcion = ?,
+                    notas = ?
+                WHERE id = ?
+            """, (
+                titulo, objetivo, categoria, prioridad,
+                fecha, hora, estado, descripcion, notas, tarea_id
+            ))
+            conn.commit()
+            conn.close()
+            return redirect(url_for("home"))
+
+    conn.close()
+    return render_template("editar.html", tarea=tarea)
+
+
 @app.route("/completar/<int:tarea_id>", methods=["POST"])
 def completar_tarea(tarea_id):
     conn = get_connection()
@@ -97,6 +142,7 @@ def eliminar_tarea(tarea_id):
     return redirect(url_for("home"))
 
 
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(host="0.0.0.0", port=5000, debug=True)
