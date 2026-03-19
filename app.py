@@ -1,9 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
+from functools import wraps
 
 app = Flask(__name__)
+app.secret_key = "clave_super_secreta_cambiame_123"
 
 DATABASE = "tareas.db"
+
+# Credenciales simples de acceso
+USUARIO_ADMIN = "marcos"
+PASSWORD_ADMIN = "1234"
 
 
 def get_connection():
@@ -32,7 +38,41 @@ def init_db():
     conn.close()
 
 
+def login_requerido(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get("logueado"):
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+
+    if request.method == "POST":
+        usuario = request.form.get("usuario", "").strip()
+        password = request.form.get("password", "").strip()
+
+        if usuario == USUARIO_ADMIN and password == PASSWORD_ADMIN:
+            session["logueado"] = True
+            session["usuario"] = usuario
+            return redirect(url_for("home"))
+        else:
+            error = "Usuario o contraseña incorrectos"
+
+    return render_template("login.html", error=error)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
 @app.route("/", methods=["GET", "POST"])
+@login_requerido
 def home():
     if request.method == "POST":
         titulo = request.form.get("titulo", "").strip()
@@ -72,10 +112,11 @@ def home():
     """).fetchall()
     conn.close()
 
-    return render_template("index.html", tareas=tareas)
+    return render_template("index.html", tareas=tareas, usuario=session.get("usuario"))
 
 
 @app.route("/editar/<int:tarea_id>", methods=["GET", "POST"])
+@login_requerido
 def editar_tarea(tarea_id):
     conn = get_connection()
     tarea = conn.execute("SELECT * FROM tareas WHERE id = ?", (tarea_id,)).fetchone()
@@ -117,10 +158,11 @@ def editar_tarea(tarea_id):
             return redirect(url_for("home"))
 
     conn.close()
-    return render_template("editar.html", tarea=tarea)
+    return render_template("editar.html", tarea=tarea, usuario=session.get("usuario"))
 
 
 @app.route("/completar/<int:tarea_id>", methods=["POST"])
+@login_requerido
 def completar_tarea(tarea_id):
     conn = get_connection()
     conn.execute("""
@@ -134,6 +176,7 @@ def completar_tarea(tarea_id):
 
 
 @app.route("/eliminar/<int:tarea_id>", methods=["POST"])
+@login_requerido
 def eliminar_tarea(tarea_id):
     conn = get_connection()
     conn.execute("DELETE FROM tareas WHERE id = ?", (tarea_id,))
