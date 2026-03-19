@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal del paciente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body style="background:#0f172a; font-family: Arial; margin:0;">
+
+    <div style="max-width:1150px; margin:0 auto; padding:32px; color:white;">
+
+        <div
+            style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:28px;">
+            <div>
+                <span
+                    style="display:inline-block; background:#1e293b; padding:8px 14px; border-radius:999px; font-size:14px; margin-bottom:14px;">
+                    Portal del paciente
+                </span>
+                <h1 style="margin:0 0 10px 0;">Bienvenido/a, {{ usuario }}</h1>
+                <p style="margin:0 0 8px 0;"><strong>Profesional:</strong> {{ profesional_nombre }}</p>
+                <p style="margin:0; color:#d1d5db; max-width:760px;">
+                    Desde este espacio podés ver tu perfil, revisar tus turnos, consultar observaciones
+                    profesionales y solicitar una nueva atención.
+                </p>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="{{ url_for('solicitar_turno') }}"
+                    style="text-decoration:none; background:#2563eb; color:white; padding:10px 14px; border-radius:8px;">
+                    Solicitar turno
+                </a>
+                <a href="{{ url_for('logout') }}"
+                    style="text-decoration:none; background:#374151; color:white; padding:10px 14px; border-radius:8px;">
+                    Cerrar sesión
+                </a>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1.4fr; gap:20px; align-items:start;">
+
+            <div style="background:white; color:#111827; border-radius:14px; padding:24px;">
+                <h2 style="margin-top:0;">Mi perfil</h2>
+
+                {% if paciente %}
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                        <strong>Nombre completo:</strong><br>
+                        {{ paciente.nombre_completo }}
+                    </div>
+
+                    <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                        <strong>Cédula de identificación:</strong><br>
+                        {{ paciente.cedula }}
+                    </div>
+
+                    <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                        <strong>Edad:</strong><br>
+                        {{ paciente.edad }}
+                    </div>
+
+                    <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                        <strong>Teléfono:</strong><br>
+                        {{ paciente.telefono }}
+                    </div>
+
+                    <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                        <strong>Correo electrónico:</strong><br>
+                        {{ paciente.email }}
+                    </div>
+                </div>
+                {% else %}
+                <div style="background:#fff7ed; color:#9a3412; padding:14px; border-radius:10px;">
+                    Tu perfil todavía no fue creado por la profesional.
+                </div>
+                {% endif %}
+            </div>
+
+            <div style="background:white; color:#111827; border-radius:14px; padding:24px;">
+                <div
+                    style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+                    <div>
+                        <h2 style="margin:0;">Mis turnos y observaciones</h2>
+                        <p style="margin:8px 0 0 0; color:#4b5563;">Acá vas a ver el estado de tus solicitudes y notas
+                            profesionales.</p>
+                    </div>
+
+                    <a href="{{ url_for('solicitar_turno') }}"
+                        style="text-decoration:none; background:#eff6ff; color:#1d4ed8; padding:10px 14px; border-radius:8px;">
+                        Nuevo turno
+                    </a>
+                </div>
+
+                {% if turnos %}
+                {% for t in turnos %}
+                <div style="border:1px solid #e5e7eb; border-radius:12px; padding:18px; margin-bottom:14px;">
+
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:12px;">
+                        <div>
+                            <h3 style="margin:0 0 6px 0;">{{ t.especialidad }}</h3>
+                            <p style="margin:0; color:#4b5563;">{{ t.motivo_consulta }}</p>
+                        </div>
+
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            {% if t.estado == 'Pendiente' %}
+                            <span
+                                style="background:#fef3c7; color:#92400e; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Pendiente
+                            </span>
+                            {% elif t.estado == 'Confirmada' %}
+                            <span
+                                style="background:#dcfce7; color:#166534; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Confirmada
+                            </span>
+                            {% elif t.estado == 'Respondida' %}
+                            <span
+                                style="background:#dbeafe; color:#1d4ed8; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Respondida
+                            </span>
+                            {% elif t.estado == 'Derivada' %}
+                            <span
+                                style="background:#ede9fe; color:#6d28d9; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Derivada
+                            </span>
+                            {% else %}
+                            <span
+                                style="background:#e5e7eb; color:#374151; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                {{ t.estado }}
+                            </span>
+                            {% endif %}
+
+                            {% if t.prioridad == 'Alta' %}
+                            <span
+                                style="background:#fee2e2; color:#991b1b; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Prioridad alta
+                            </span>
+                            {% elif t.prioridad == 'Media' %}
+                            <span
+                                style="background:#fef3c7; color:#92400e; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Prioridad media
+                            </span>
+                            {% else %}
+                            <span
+                                style="background:#e0f2fe; color:#075985; padding:6px 10px; border-radius:999px; font-size:13px;">
+                                Prioridad baja
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                            <strong>Fecha del turno</strong><br>
+                            {{ t.fecha_turno }}
+                        </div>
+
+                        <div style="background:#f9fafb; padding:12px; border-radius:10px;">
+                            <strong>Hora del turno</strong><br>
+                            {{ t.hora_turno }}
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:10px;">
+                        <strong>Derivación:</strong>
+                        {% if t.derivado == 'Sí' %}
+                        Sí
+                        {% else %}
+                        No
+                        {% endif %}
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <strong>Especialidad derivada:</strong>
+                        {{ t.especialidad_derivada if t.especialidad_derivada else "No derivado" }}
+                    </div>
+
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:14px; border-radius:10px;">
+                        <strong>Observaciones profesionales</strong>
+                        <div style="margin-top:8px; color:#374151;">
+                            {{ t.observaciones_profesional if t.observaciones_profesional else "Todavía no hay
+                            observaciones cargadas." }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div style="background:#f9fafb; padding:18px; border-radius:10px; color:#4b5563;">
+                    Todavía no tenés turnos registrados.
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

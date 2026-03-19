@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
   <header class="hero">
     <div class="hero-content hero-topbar">
       <div>
         <span class="hero-tag">Edición</span>
         <h1>Editar tarea</h1>
-        <p>Modificá la información de esta tarea y guardá los cambios.</p>
+        <p>Modificá la información de tu tarea.</p>
       </div>
 
       <div class="user-box">
@@ -41,18 +43,18 @@
 
         <label for="categoria">Categoría</label>
         <select id="categoria" name="categoria" required>
-          <option value="Trabajo" {% if tarea.categoria == 'Trabajo' %}selected{% endif %}>Trabajo</option>
-          <option value="Estudio" {% if tarea.categoria == 'Estudio' %}selected{% endif %}>Estudio</option>
-          <option value="Personal" {% if tarea.categoria == 'Personal' %}selected{% endif %}>Personal</option>
-          <option value="Proyecto" {% if tarea.categoria == 'Proyecto' %}selected{% endif %}>Proyecto</option>
-          <option value="Salud" {% if tarea.categoria == 'Salud' %}selected{% endif %}>Salud</option>
+          <option value="Trabajo" {% if tarea.categoria=='Trabajo' %}selected{% endif %}>Trabajo</option>
+          <option value="Estudio" {% if tarea.categoria=='Estudio' %}selected{% endif %}>Estudio</option>
+          <option value="Personal" {% if tarea.categoria=='Personal' %}selected{% endif %}>Personal</option>
+          <option value="Proyecto" {% if tarea.categoria=='Proyecto' %}selected{% endif %}>Proyecto</option>
+          <option value="Salud" {% if tarea.categoria=='Salud' %}selected{% endif %}>Salud</option>
         </select>
 
         <label for="prioridad">Prioridad</label>
         <select id="prioridad" name="prioridad" required>
-          <option value="Alta" {% if tarea.prioridad == 'Alta' %}selected{% endif %}>Alta</option>
-          <option value="Media" {% if tarea.prioridad == 'Media' %}selected{% endif %}>Media</option>
-          <option value="Baja" {% if tarea.prioridad == 'Baja' %}selected{% endif %}>Baja</option>
+          <option value="Alta" {% if tarea.prioridad=='Alta' %}selected{% endif %}>Alta</option>
+          <option value="Media" {% if tarea.prioridad=='Media' %}selected{% endif %}>Media</option>
+          <option value="Baja" {% if tarea.prioridad=='Baja' %}selected{% endif %}>Baja</option>
         </select>
 
         <div class="row">
@@ -69,16 +71,16 @@
 
         <label for="estado">Estado</label>
         <select id="estado" name="estado" required>
-          <option value="Pendiente" {% if tarea.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
-          <option value="En proceso" {% if tarea.estado == 'En proceso' %}selected{% endif %}>En proceso</option>
-          <option value="Completada" {% if tarea.estado == 'Completada' %}selected{% endif %}>Completada</option>
+          <option value="Pendiente" {% if tarea.estado=='Pendiente' %}selected{% endif %}>Pendiente</option>
+          <option value="En proceso" {% if tarea.estado=='En proceso' %}selected{% endif %}>En proceso</option>
+          <option value="Completada" {% if tarea.estado=='Completada' %}selected{% endif %}>Completada</option>
         </select>
 
         <label for="descripcion">Descripción detallada</label>
-        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Escribí detalles importantes sobre la tarea...">{{ tarea.descripcion }}</textarea>
+        <textarea id="descripcion" name="descripcion" rows="4">{{ tarea.descripcion }}</textarea>
 
         <label for="notas">Notas personales</label>
-        <textarea id="notas" name="notas" rows="3" placeholder="Ideas, recordatorios u observaciones...">{{ tarea.notas }}</textarea>
+        <textarea id="notas" name="notas" rows="3">{{ tarea.notas }}</textarea>
 
         <div class="edit-actions">
           <button type="submit" class="btn btn-primary">Guardar cambios</button>
@@ -88,4 +90,5 @@
     </section>
   </main>
 </body>
+
 </html>

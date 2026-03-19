@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar turno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body style="background:#0f172a; font-family: Arial; margin:0;">
+
+    <div style="max-width:1000px; margin:0 auto; padding:32px; color:white;">
+
+        <div
+            style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:28px;">
+            <div>
+                <span
+                    style="display:inline-block; background:#1e293b; padding:8px 14px; border-radius:999px; font-size:14px; margin-bottom:14px;">
+                    Solicitud de turno
+                </span>
+                <h1 style="margin:0 0 10px 0;">Solicitar una nueva atención</h1>
+                <p style="margin:0 0 8px 0;"><strong>Profesional:</strong> {{ profesional_nombre }}</p>
+                <p style="margin:0; color:#d1d5db; max-width:760px;">
+                    Elegí la especialidad, detallá el motivo de consulta y seleccioná
+                    una fecha y hora disponibles dentro del horario de atención.
+                </p>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="{{ url_for('panel_paciente') }}"
+                    style="text-decoration:none; background:#374151; color:white; padding:10px 14px; border-radius:8px;">
+                    Volver al panel
+                </a>
+                <a href="{{ url_for('logout') }}"
+                    style="text-decoration:none; background:#111827; color:white; padding:10px 14px; border-radius:8px;">
+                    Cerrar sesión
+                </a>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:20px; align-items:start;">
+
+            <div style="background:white; color:#111827; padding:26px; border-radius:14px;">
+                <h2 style="margin-top:0;">Formulario de solicitud</h2>
+                <p style="color:#4b5563; margin-top:0;">
+                    Completá los datos necesarios para registrar tu turno.
+                </p>
+
+                {% if error %}
+                <div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:10px; margin-bottom:16px;">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                {% if success %}
+                <div style="background:#dcfce7; color:#166534; padding:12px; border-radius:10px; margin-bottom:16px;">
+                    {{ success }}
+                </div>
+                {% endif %}
+
+                <form method="POST">
+                    <label style="display:block; margin-bottom:6px; font-weight:bold;">Especialidad</label>
+                    <select name="especialidad" required
+                        style="width:100%; margin-bottom:14px; padding:12px; border:1px solid #d1d5db; border-radius:10px;">
+                        <option value="">Seleccionar</option>
+                        <option selected>Psicología</option>
+                        <option>Psiquiatría</option>
+                    </select>
+
+                    <label style="display:block; margin-bottom:6px; font-weight:bold;">Motivo de consulta</label>
+                    <input type="text" name="motivo_consulta"
+                        placeholder="Ej: ansiedad, primera consulta, seguimiento terapéutico" required
+                        style="width:100%; margin-bottom:14px; padding:12px; border:1px solid #d1d5db; border-radius:10px; box-sizing:border-box;">
+
+                    <label style="display:block; margin-bottom:6px; font-weight:bold;">Prioridad</label>
+                    <select name="prioridad" required
+                        style="width:100%; margin-bottom:14px; padding:12px; border:1px solid #d1d5db; border-radius:10px;">
+                        <option value="">Seleccionar</option>
+                        <option>Alta</option>
+                        <option>Media</option>
+                        <option>Baja</option>
+                    </select>
+
+                    <label style="display:block; margin-bottom:6px; font-weight:bold;">Fecha del turno</label>
+                    <input type="date" name="fecha_turno" required
+                        style="width:100%; margin-bottom:14px; padding:12px; border:1px solid #d1d5db; border-radius:10px; box-sizing:border-box;">
+
+                    <label style="display:block; margin-bottom:6px; font-weight:bold;">Hora del turno</label>
+                    <select name="hora_turno" required
+                        style="width:100%; margin-bottom:18px; padding:12px; border:1px solid #d1d5db; border-radius:10px;">
+                        <option value="">Seleccionar</option>
+                        {% for hora in horarios %}
+                        <option value="{{ hora }}">{{ hora }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit"
+                        style="width:100%; padding:13px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">
+                        Enviar solicitud
+                    </button>
+                </form>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:20px;">
+                <div style="background:white; color:#111827; padding:24px; border-radius:14px;">
+                    <h2 style="margin-top:0;">Horario de atención</h2>
+                    <div style="background:#eef2ff; padding:14px; border-radius:10px;">
+                        <strong>Días:</strong> Lunes a sábado<br>
+                        <strong>Horario:</strong> 07:00 a 18:00 hs
+                    </div>
+                </div>
+
+                <div style="background:white; color:#111827; padding:24px; border-radius:14px;">
+                    <h2 style="margin-top:0;">Importante</h2>
+                    <ul style="padding-left:18px; color:#374151; margin:0;">
+                        <li>Los turnos están sujetos a disponibilidad.</li>
+                        <li>No se pueden solicitar turnos los domingos.</li>
+                        <li>Si un horario ya está ocupado, deberás elegir otro.</li>
+                        <li>La profesional podrá dejar observaciones luego de revisar tu solicitud.</li>
+                        <li>En algunos casos puede haber derivación a Psiquiatría.</li>
+                    </ul>
+                </div>
+
+                <div style="background:white; color:#111827; padding:24px; border-radius:14px;">
+                    <h2 style="margin-top:0;">Sugerencias</h2>
+                    <p style="margin:0; color:#374151;">
+                        Elegí una fecha dentro de tus posibilidades reales de asistencia y describí
+                        el motivo de consulta de forma breve y clara.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

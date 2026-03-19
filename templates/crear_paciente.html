@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear paciente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="hero-topbar">
+            <div>
+                <span class="hero-tag">Panel profesional</span>
+                <h1>Crear nuevo paciente</h1>
+                <p><strong>Profesional a cargo:</strong> {{ profesional_nombre }}</p>
+                <p>Completá los datos para generar el acceso del paciente al sistema.</p>
+            </div>
+
+            <div class="user-box">
+                <a href="{{ url_for('lista_pacientes') }}" class="btn btn-secondary">Ver pacientes</a>
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-dark">Cerrar sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content" style="grid-template-columns: 1.2fr 0.8fr;">
+        <section class="card form-card">
+            <div class="section-title">
+                <h2>Formulario de alta</h2>
+                <p>Este acceso será utilizado por el paciente para ingresar y solicitar turnos.</p>
+            </div>
+
+            {% if error %}
+            <div class="login-error">{{ error }}</div>
+            {% endif %}
+
+            {% if success %}
+            <div class="login-success">{{ success }}</div>
+            {% endif %}
+
+            <form method="POST">
+                <label for="nombre_completo">Nombre completo</label>
+                <input type="text" id="nombre_completo" name="nombre_completo" placeholder="Nombre completo" required>
+
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Usuario para el paciente" required>
+
+                <label for="password">Contraseña inicial</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña inicial" required>
+
+                <label for="cedula">Cédula de identificación</label>
+                <input type="text" id="cedula" name="cedula" placeholder="Ej: 12345678" required>
+
+                <label for="edad">Edad</label>
+                <input type="text" id="edad" name="edad" placeholder="Edad" required>
+
+                <label for="telefono">Teléfono</label>
+                <input type="text" id="telefono" name="telefono" placeholder="Ej: 099 123 456" required>
+
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;">Crear paciente</button>
+            </form>
+        </section>
+
+        <aside class="card">
+            <div class="section-title">
+                <h2>Información útil</h2>
+                <p>Recomendaciones para el alta de pacientes.</p>
+            </div>
+
+            <div class="task-list">
+                <article class="task-item">
+                    <h3>Acceso del paciente</h3>
+                    <div class="task-info">
+                        <p>El usuario y la contraseña inicial se entregan al paciente para que pueda ingresar al portal.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="task-item">
+                    <h3>Datos obligatorios</h3>
+                    <div class="task-info">
+                        <p>Nombre completo, cédula, edad, teléfono y correo son necesarios para registrar correctamente
+                            el perfil.</p>
+                    </div>
+                </article>
+
+                <article class="task-item">
+                    <h3>Uso posterior</h3>
+                    <div class="task-info">
+                        <p>Una vez creado, el paciente podrá iniciar sesión, solicitar turnos y ver observaciones
+                            profesionales.</p>
+                    </div>
+                </article>
+            </div>
+        </aside>
+    </main>
+
+</body>
+
+</html>

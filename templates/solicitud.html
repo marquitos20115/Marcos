@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitud de atención psicológica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body style="background:#0f172a; font-family: Arial;">
+
+    <div style="max-width:800px; margin:50px auto; background:white; padding:30px; border-radius:12px;">
+
+        <h2>Solicitud de atención psicológica</h2>
+        <p>Completá el formulario para solicitar una consulta con {{ profesional_nombre }}.</p>
+
+        {% if error %}
+        <p style="color:red; margin-bottom:10px;">{{ error }}</p>
+        {% endif %}
+
+        {% if success %}
+        <p style="color:green; margin-bottom:10px;">{{ success }}</p>
+        {% endif %}
+
+        <div style="background:#eef2ff; padding:12px; border-radius:8px; margin-bottom:15px;">
+            <strong>Horario de atención:</strong><br>
+            Lunes a sábado<br>
+            De 07:00 a 18:00 hs
+        </div>
+
+        <form method="POST">
+            <input type="text" name="nombre_completo" placeholder="Nombre completo" required
+                style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="text" name="dni" placeholder="DNI" required
+                style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="text" name="edad" placeholder="Edad" required
+                style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="text" name="telefono" placeholder="Teléfono" required
+                style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="email" name="email" placeholder="Correo" required
+                style="width:100%; margin-bottom:10px; padding:10px;">
+            <input type="text" name="obra_social" placeholder="Obra social"
+                style="width:100%; margin-bottom:10px; padding:10px;">
+
+            <select name="especialidad" required style="width:100%; margin-bottom:10px; padding:10px;">
+                <option value="">Especialidad</option>
+                <option selected>Psicología</option>
+                <option>Psiquiatría</option>
+            </select>
+
+            <input type="text" name="motivo_consulta" placeholder="Motivo de consulta" required
+                style="width:100%; margin-bottom:10px; padding:10px;">
+
+            <select name="prioridad" required style="width:100%; margin-bottom:10px; padding:10px;">
+                <option value="">Prioridad</option>
+                <option>Alta</option>
+                <option>Media</option>
+                <option>Baja</option>
+            </select>
+
+            <label style="display:block; margin-bottom:5px;">Fecha del turno</label>
+            <input type="date" name="fecha_turno" required style="width:100%; margin-bottom:10px; padding:10px;">
+
+            <label style="display:block; margin-bottom:5px;">Hora del turno</label>
+            <select name="hora_turno" required style="width:100%; margin-bottom:10px; padding:10px;">
+                <option value="">Seleccionar</option>
+                {% for hora in horarios %}
+                <option value="{{ hora }}">{{ hora }}</option>
+                {% endfor %}
+            </select>
+
+            <textarea name="observaciones" placeholder="Observaciones"
+                style="width:100%; margin-bottom:10px; padding:10px; min-height:100px;"></textarea>
+
+            <button type="submit"
+                style="width:100%; padding:12px; background:#2563eb; color:white; border:none; border-radius:8px;">
+                Enviar solicitud
+            </button>
+        </form>
+
+    </div>
+
+</body>
+
+</html>

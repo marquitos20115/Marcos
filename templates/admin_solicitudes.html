@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de turnos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="hero-topbar">
+            <div>
+                <span class="hero-tag">Panel profesional</span>
+                <h1>Gestión de turnos y pacientes</h1>
+                <p><strong>Profesional a cargo:</strong> {{ profesional_nombre }}</p>
+                <p>Visualizá, confirmá, respondé, derivá y documentá observaciones clínicas.</p>
+            </div>
+
+            <div class="user-box">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-dark">Cerrar sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content" style="grid-template-columns: 1fr;">
+        <section class="card">
+            <div class="section-title">
+                <h2>Resumen general</h2>
+                <p>Estado actual de la agenda clínica.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card stat-blue">
+                    Total turnos
+                    <p>{{ total }}</p>
+                </div>
+                <div class="stat-card stat-yellow">
+                    Pendientes
+                    <p>{{ pendientes }}</p>
+                </div>
+                <div class="stat-card stat-green">
+                    Confirmadas
+                    <p>{{ confirmadas }}</p>
+                </div>
+                <div class="stat-card stat-purple">
+                    Derivadas
+                    <p>{{ derivadas }}</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Horario profesional:</strong><br>
+                Lunes a sábado · 07:00 a 18:00 hs
+            </div>
+
+            {% if solicitudes %}
+            <div class="task-list">
+                {% for s in solicitudes %}
+                <article class="task-item">
+                    <div class="task-top">
+                        <div>
+                            <h3>{{ s.nombre_completo }}</h3>
+                            <p class="task-objetivo">
+                                {{ s.especialidad }} · {{ s.email }}
+                            </p>
+                        </div>
+
+                        <div class="task-badges">
+                            <span class="badge prioridad-{{ s.prioridad|lower }}">{{ s.prioridad }}</span>
+
+                            {% if s.estado == 'Pendiente' %}
+                            <span class="badge estado-pendiente">Pendiente</span>
+                            {% elif s.estado == 'Confirmada' %}
+                            <span class="badge estado-confirmada">Confirmada</span>
+                            {% elif s.estado == 'Respondida' %}
+                            <span class="badge estado-respondida">Respondida</span>
+                            {% elif s.estado == 'Derivada' %}
+                            <span class="badge estado-derivada">Derivada</span>
+                            {% else %}
+                            <span class="badge">{{ s.estado }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 14px;">
+                        <div class="soft-box">
+                            <p><strong>Cédula:</strong> {{ s.cedula }}</p>
+                            <p><strong>Edad:</strong> {{ s.edad }}</p>
+                            <p><strong>Teléfono:</strong> {{ s.telefono }}</p>
+                            <p><strong>Correo:</strong> {{ s.email }}</p>
+                        </div>
+
+                        <div class="soft-box">
+                            <p><strong>Fecha del turno:</strong> {{ s.fecha_turno }}</p>
+                            <p><strong>Hora del turno:</strong> {{ s.hora_turno }}</p>
+                            <p><strong>Derivado:</strong> {{ s.derivado }}</p>
+                            <p><strong>Especialidad derivada:</strong> {{ s.especialidad_derivada if
+                                s.especialidad_derivada else "No derivado" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="task-info">
+                        <p><strong>Motivo de consulta:</strong> {{ s.motivo_consulta }}</p>
+                        <p><strong>Fecha de registro:</strong> {{ s.fecha_creacion }}</p>
+                    </div>
+
+                    <form action="{{ url_for('guardar_observacion', turno_id=s.id) }}" method="POST"
+                        style="margin-top: 14px;">
+                        <label for="obs_{{ s.id }}">Observación profesional</label>
+                        <textarea id="obs_{{ s.id }}" name="observaciones_profesional"
+                            placeholder="Escribir observación profesional...">{{ s.observaciones_profesional if s.observaciones_profesional else "" }}</textarea>
+
+                        <button type="submit" class="btn btn-dark">Guardar observación</button>
+                    </form>
+
+                    <div class="task-actions">
+                        {% if s.estado == 'Pendiente' %}
+                        <form action="{{ url_for('confirmar_turno', turno_id=s.id) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Confirmar turno</button>
+                        </form>
+                        {% endif %}
+
+                        {% if s.estado != 'Respondida' and s.estado != 'Derivada' %}
+                        <form action="{{ url_for('responder_solicitud', turno_id=s.id) }}" method="POST">
+                            <button type="submit" class="btn btn-success">Marcar respondida</button>
+                        </form>
+                        {% endif %}
+
+                        {% if s.derivado != 'Sí' %}
+                        <form action="{{ url_for('derivar_psiquiatria', turno_id=s.id) }}" method="POST">
+                            <button type="submit" class="btn btn-secondary">Derivar a Psiquiatría</button>
+                        </form>
+                        {% endif %}
+
+                        <form action="{{ url_for('eliminar_solicitud', turno_id=s.id) }}" method="POST"
+                            onsubmit="return confirm('¿Seguro que querés eliminar este turno?');">
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>No hay turnos registrados todavía</h3>
+                <p>Cuando un paciente solicite atención, aparecerá en este panel.</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+</body>
+
+</html>
