@@ -148,6 +148,10 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover {
@@ -170,6 +174,16 @@ body {
 .btn-danger {
   background: #ef4444;
   color: white;
+}
+
+.btn-edit {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
 }
 
 .task-list {
@@ -295,6 +309,26 @@ body {
   color: var(--muted);
 }
 
+.edit-page {
+  max-width: 760px;
+  margin: -24px auto 40px;
+  padding: 0 20px;
+}
+
+.edit-card {
+  width: 100%;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.edit-actions .btn {
+  flex: 1;
+}
+
 @media (max-width: 900px) {
   .main-content {
     grid-template-columns: 1fr;
@@ -314,7 +348,8 @@ body {
     font-size: 15px;
   }
 
-  .main-content {
+  .main-content,
+  .edit-page {
     margin-top: -16px;
     padding: 0 14px 24px;
     gap: 16px;
@@ -341,12 +376,14 @@ body {
     justify-content: flex-start;
   }
 
-  .task-actions {
+  .task-actions,
+  .edit-actions {
     flex-direction: column;
   }
 
   .task-actions form,
-  .task-actions .btn {
+  .task-actions .btn,
+  .edit-actions .btn {
     width: 100%;
   }
 }
