@@ -33,6 +33,13 @@ body {
   margin: 0 auto;
 }
 
+.hero-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .hero-tag {
   display: inline-block;
   margin-bottom: 14px;
@@ -55,6 +62,19 @@ body {
   color: #d1d5db;
   font-size: 17px;
   line-height: 1.7;
+}
+
+.user-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e5e7eb;
 }
 
 .main-content {
@@ -329,9 +349,66 @@ body {
   flex: 1;
 }
 
+.login-body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #111827, #1f2937, #374151);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-wrapper {
+  width: 100%;
+  max-width: 460px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 24px;
+  padding: 32px 26px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.login-card h1 {
+  margin: 0 0 10px;
+  font-size: 34px;
+  color: #111827;
+}
+
+.login-text {
+  margin: 0 0 18px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.login-tag {
+  background: #111827;
+  color: white;
+}
+
+.login-error {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .main-content {
     grid-template-columns: 1fr;
+  }
+
+  .hero-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-box {
+    align-items: flex-start;
   }
 }
 
@@ -355,7 +432,8 @@ body {
     gap: 16px;
   }
 
-  .card {
+  .card,
+  .login-card {
     padding: 18px;
     border-radius: 18px;
   }
@@ -385,5 +463,9 @@ body {
   .task-actions .btn,
   .edit-actions .btn {
     width: 100%;
+  }
+
+  .login-card h1 {
+    font-size: 28px;
   }
 }
